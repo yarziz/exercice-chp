@@ -1,0 +1,34 @@
+#include <cstdio>
+#include <cstdlib>
+#include <unistd.h>
+#include <mpi.h>
+
+
+
+
+int main(int argc, char *argv[])
+{
+  int rank,nproc,iree;
+  MPI_Init(&argc,&argv);
+  MPI_Comm_rank(MPI_COMM_WORLD,&rank);
+  MPI_Comm_size(MPI_COMM_WORLD, &nproc);
+  printf("Hello,I am rank %d/%d\n",rank,nproc);
+  int i=0;
+  if(rank==0){
+    i=15;
+    iree=MPI_Send(&i,1,MPI_INT,nproc-2,0,MPI_COMM_WORLD);
+  }else if(rank==nproc-2){
+    int j=12;
+    printf("on rank %d/%d  before communication :%d\n",rank,nproc,j);
+    iree=MPI_Recv(&j,1,MPI_INT,0,0,MPI_COMM_WORLD,MPI_STATUS_IGNORE);
+    printf("on rank %d/%d  after communication :%d\n",rank,nproc,j);
+    //mpi_recv
+  }
+
+
+
+
+
+  MPI_Finalize();
+  return 0;
+}
